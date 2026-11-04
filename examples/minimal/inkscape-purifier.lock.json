@@ -1,0 +1,117 @@
+{
+  "entries": [
+    {
+      "hash": "sha256-WFZ2SfTp1zs/92CuFNrc0gHv9nIqtDCJkf4g/72X47g=",
+      "id": "org.inkscape.extension.6851",
+      "mirrors": [],
+      "path": "org.inkscape.extension.6851.zip",
+      "url": "https://media.inkscape.org/media/resources/file/realscale_2025.01.24.02.39.zip"
+    }
+  ],
+  "native": {
+    "metadata": {
+      "org.inkscape.extension.6851": {
+        "Extension Type": [
+          "modify path"
+        ],
+        "Inkscape Version": [
+          "1.2",
+          "1.4"
+        ],
+        "Platform": [
+          "linux",
+          "os x",
+          "windows"
+        ],
+        "author": "Maren Hachmann",
+        "dates": {
+          "created": "2015-10-30T21:53:24+00:00",
+          "edited": "2025-01-24T01:40:51.921595+00:00"
+        },
+        "files": [
+          "org.inkscape.extension.6851/README.md",
+          "org.inkscape.extension.6851/img/",
+          "org.inkscape.extension.6851/img/realscale_ui_tab1.png",
+          "org.inkscape.extension.6851/img/realscale_ui_example_kiel.png",
+          "org.inkscape.extension.6851/img/realscale_ui_tab2.png",
+          "org.inkscape.extension.6851/realscale.inx",
+          "org.inkscape.extension.6851/realscale.png",
+          "org.inkscape.extension.6851/realscale.py",
+          "org.inkscape.extension.6851/realscale_70x60.svg",
+          "org.inkscape.extension.6851/realscale_LICENSE",
+          "org.inkscape.extension.6851/realscale_square.svg"
+        ],
+        "icon": "https://media.inkscape.org/media/resources/thumb/realscale.png",
+        "id": "org.inkscape.extension.6851",
+        "license": "GPLv3",
+        "links": {
+          "file": "https://media.inkscape.org/media/resources/file/realscale_2025.01.24.02.39.zip",
+          "html": "https://inkscape.org/gallery/item/6851/",
+          "json": "https://inkscape.org/gallery/item/6851/json/"
+        },
+        "name": "RealScale (resize by line of known length)",
+        "previous": {
+          "Extension Type": [
+            "modify path",
+            "modify path",
+            "modify path",
+            "modify path"
+          ],
+          "Inkscape Version": [
+            "0.48",
+            "0.91",
+            "0.92",
+            "1.0",
+            "1.1",
+            "1.2",
+            "1.2"
+          ],
+          "Platform": [
+            "linux",
+            "linux",
+            "linux",
+            "linux",
+            "os x",
+            "os x",
+            "os x",
+            "os x",
+            "windows",
+            "windows",
+            "windows",
+            "windows"
+          ]
+        },
+        "stats": {
+          "downloaded": 624,
+          "extra": 0,
+          "liked": 9,
+          "revisions": 7
+        },
+        "summary": "Quickly resize (architectural) drawings by indicating a line and its length in real world units. Optionally scale the drawing with a specific scale factor and draw a scale rule.\r",
+        "type": "application/zip",
+        "verified": true
+      }
+    },
+    "modules": {
+      "org.inkscape.extension.6851": [
+        {
+          "descriptor": "realscale.inx",
+          "id": "de.vektorrascheln.realscale",
+          "name": "RealScale",
+          "script": "realscale.py"
+        }
+      ]
+    }
+  },
+  "purifier": "inkscape",
+  "sdk": "10796cbf1f814c154b0e188a6e0623ef86bc7851eb76a79342723ecb697143e8",
+  "selection": {
+    "extensions": [
+      {
+        "id": "org.inkscape.extension.6851",
+        "query": "RealScale"
+      }
+    ]
+  },
+  "version": 1
+}
