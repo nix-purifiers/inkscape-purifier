@@ -27,13 +27,16 @@ pkgs.runCommand "inkscape-resource-projections" { nativeBuildInputs = [ pkgs.pyt
   test -e ${consumers}
   test -e ${selected.packages.project}/private.txt
   python - <<'PY'
-  import hashlib, json, pathlib, xml.etree.ElementTree as ET
+  import hashlib, json, pathlib, zipfile, xml.etree.ElementTree as ET
   root = pathlib.Path('${projection.directory}')
   catalog = json.load(open('${projection.catalog}'))
   assert sorted(catalog['files']) == ['drawing.svg']
   exported = (root / 'drawing.svg').read_bytes()
   native = pathlib.Path('${selected.packages.project}/drawing.svg').read_bytes()
   assert hashlib.sha256(exported).digest() == hashlib.sha256(native).digest()
+  with zipfile.ZipFile('${projection.classPath}') as jar:
+      assert jar.namelist() == ['drawing.svg']
+      assert jar.read('drawing.svg') == native
   svg = ET.fromstring(exported)
   assert svg.tag == '{http://www.w3.org/2000/svg}svg'
   PY
