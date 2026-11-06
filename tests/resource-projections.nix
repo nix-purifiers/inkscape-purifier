@@ -2,7 +2,7 @@
 { pkgs, build }:
 let
   plain = build { src = ../examples/minimal; };
-  selected = build {
+  args = {
     src = ../examples/minimal;
     resourceRoots."drawing.svg" = "drawing.svg";
     doCheck = true;
@@ -11,6 +11,36 @@ let
       printf 'private sibling\n' > "$out/private.txt"
     '';
   };
+  selected = build args;
+  rejects =
+    name: roots: expected:
+    let
+      actual = (build (args // { resourceRoots = roots; })).projections.resources;
+    in
+    actual.overrideAttrs (old: {
+      name = "inkscape-resource-reject-${name}";
+      buildCommand = ''
+        if ( ${old.buildCommand} ) > "$TMPDIR/rejection.log" 2>&1; then
+          echo "unexpectedly accepted ${name}" >&2
+          exit 1
+        fi
+        ${pkgs.lib.concatMapStringsSep "\n" (
+          message: "grep -F -- ${pkgs.lib.escapeShellArg message} \"$TMPDIR/rejection.log\""
+        ) expected}
+        mkdir -p "$out"
+        cp "$TMPDIR/rejection.log" "$out/rejection.log"
+      '';
+    });
+  missing = rejects "missing-output" { "missing.svg" = "missing.svg"; } [
+    "FileNotFoundError:"
+    "missing.svg"
+  ];
+  unsafeSource = rejects "source-traversal" { "drawing.svg" = "../private.txt"; } [
+    "canonical relative resource path: ../private.txt"
+  ];
+  unsafeDestination = rejects "destination-traversal" { "../escape.svg" = "drawing.svg"; } [
+    "canonical relative resource path: ../escape.svg"
+  ];
   projection = selected.packages.project.projections.resources;
   consumers = import ./resource-consumer.nix {
     inherit pkgs projection;
@@ -25,6 +55,9 @@ assert plain.projections == { };
 assert selected.projections.resources == projection;
 pkgs.runCommand "inkscape-resource-projections" { nativeBuildInputs = [ pkgs.python3 ]; } ''
   test -e ${consumers}
+  test -e ${missing}
+  test -e ${unsafeSource}
+  test -e ${unsafeDestination}
   test -e ${selected.packages.project}/private.txt
   python - <<'PY'
   import hashlib, json, pathlib, zipfile, xml.etree.ElementTree as ET

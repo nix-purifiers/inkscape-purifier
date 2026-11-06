@@ -106,12 +106,8 @@ extension or project-script behavior. Native Inkscape actions can report errors
 without a failing exit status, so builds should check their output.
 
 Linux x86_64 and aarch64 are configured. Runtime verification currently runs
-on x86_64. Typed projection interfaces are unsupported.
-
-## Credits
-
-The purifier idea was inspired by nixcloud's
-[cargo (libnix)](https://github.com/nixcloud/cargo).
+on x86_64. Explicit public resource projections are available as described
+below. A library ABI or browser application is not inferred from an export.
 
 ## Public resource projections
 
@@ -119,8 +115,7 @@ The purifier idea was inspired by nixcloud's
 to relative paths inside its native build output. For example,
 `resourceRoots."drawing.svg" = "drawing.svg";` exposes the actual exported SVG
 through `.projections.resources`, `.projections.web`, and
-`.projections.java-resources` on the build
-result and its `packages.project`. The selected view has `.directory`,
+`.projections.java-resources` on the build result and its `packages.project`. The selected view has `.directory`,
 `.documentRoot`, `.classPath`, and `.catalog` paths. Optional
 `resourceDependencies` supplies already selected resource views.
 
@@ -129,3 +124,8 @@ source, private siblings and caches are not included implicitly. HTTP and Java
 checks compare the native exported SVG bytes, verify its XML root, and reject
 private sibling and metadata requests. This is resource packaging of a native
 Inkscape export, with no inference of a library ABI or browser application.
+
+## Credits
+
+The purifier idea was inspired by nixcloud's
+[cargo (libnix)](https://github.com/nixcloud/cargo).
