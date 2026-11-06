@@ -118,7 +118,8 @@ The purifier idea was inspired by nixcloud's
 `buildInkscapeProject` accepts explicit `resourceRoots` mapping exported paths
 to relative paths inside its native build output. For example,
 `resourceRoots."drawing.svg" = "drawing.svg";` exposes the actual exported SVG
-through `.projections.resources`, `.web`, and `.java-resources` on the build
+through `.projections.resources`, `.projections.web`, and
+`.projections.java-resources` on the build
 result and its `packages.project`. The selected view has `.directory`,
 `.documentRoot`, `.classPath`, and `.catalog` paths. Optional
 `resourceDependencies` supplies already selected resource views.
