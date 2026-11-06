@@ -112,3 +112,19 @@ on x86_64. Typed projection interfaces are unsupported.
 
 The purifier idea was inspired by nixcloud's
 [cargo (libnix)](https://github.com/nixcloud/cargo).
+
+## Public resource projections
+
+`buildInkscapeProject` accepts explicit `resourceRoots` mapping exported paths
+to relative paths inside its native build output. For example,
+`resourceRoots."drawing.svg" = "drawing.svg";` exposes the actual exported SVG
+through `.projections.resources`, `.web`, and `.java-resources` on the build
+result and its `packages.project`. The selected view has `.directory`,
+`.documentRoot`, `.classPath`, and `.catalog` paths. Optional
+`resourceDependencies` supplies already selected resource views.
+
+The default is no resource projection. Select only public artifacts; profiles,
+source, private siblings and caches are not included implicitly. HTTP and Java
+checks compare the native exported SVG bytes, verify its XML root, and reject
+private sibling and metadata requests. This is resource packaging of a native
+Inkscape export, with no inference of a library ABI or browser application.

@@ -2,6 +2,7 @@
   lib,
   runCommand,
   python3,
+  purifier,
   lockedSdk,
   pythonSdk,
   xvfb-run,
@@ -20,6 +21,8 @@
   fetchers ? { },
   doCheck ? false,
   checkCommand ? "",
+  resourceRoots ? { },
+  resourceDependencies ? [ ],
 }:
 let
   lock = readLock { inherit src lockFile; };
@@ -43,7 +46,7 @@ let
         "output"
       ]);
   };
-  project = runCommand "inkscape-project" { } ''
+  builtProject = runCommand "inkscape-project" { } ''
     export INKSCAPE_PURIFIER_ENVIRONMENT=${profile} INKSCAPE_PURIFIER_LOCKED_SDK=${lockedSdk} INKSCAPE_PURIFIER_PYTHON_SDK=${pythonSdk}
     export INKSCAPE_PURIFIER_CACHE=${emptyCache} INKSCAPE_PURIFIER_FONTS=${fontConfig}
     export INKSCAPE_PURIFIER_XVFB=${xvfb-run} INKSCAPE_PURIFIER_DBUS=${lib.getBin dbus}
@@ -56,6 +59,17 @@ let
     ${python3}/bin/python ${driver}/inkscape_purifier_run_project.py
     ${lib.optionalString doCheck checkCommand}
   '';
+  projections = lib.optionalAttrs (resourceRoots != { }) (
+    purifier.resourceProjections {
+      producer = builtProject;
+      roots = resourceRoots;
+      dependencies = resourceDependencies;
+      inherit runCommand python3;
+    }
+  );
+  project = builtProject // {
+    inherit projections;
+  };
   release =
     runCommand "inkscape-project-release"
       {
@@ -76,6 +90,6 @@ in
     environment = profile;
   };
   tests = project;
-  inherit release;
+  inherit release projections;
   fetches = lock.entries;
 }
